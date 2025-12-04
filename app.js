@@ -44,8 +44,12 @@ Exercise 4
 
 Solve Exercise 4 here:
 */
+const starters = pokemon.filter(p => p.starter === true) 
+// I wanted to choose a randome starter. I hope it's okay, if not please let me know and I'll change it to 'find()'.
 
-game.party.push(pokemon[0])
+const randomStarter = starters[Math.floor(Math.random() * starters.length)]
+
+game.party.push(randomStarter)
 
 /*
 Exercise 5
@@ -55,8 +59,14 @@ Exercise 5
 
 Solve Exercise 5 here:
 */
+const types = ['poison', 'water', 'fire']
 
-game.party.push(pokemon[1], pokemon[4], pokemon[6])
+types.forEach((t) => {
+    const selectByType = pokemon.find(p => p.type === t)
+    game.party.push(selectByType)
+})
+
+//  console.log(game.party);
 
 /*
 Exercise 6
@@ -80,6 +90,8 @@ game.gyms.forEach((gym) => {
 
 })
 
+// console.log(game.gyms);
+
 /*
 Exercise 7
 1. Evolve the starter Pokémon you added to your party earlier. Each starter Pokémon evolves into a specific one.
@@ -97,8 +109,11 @@ When working with an array of objects, the splice() array method is ideal for re
 
 Solve Exercise 7 here:
 */
+const starterInd = pokemon.indexOf(randomStarter)
 
-game.party.splice(0, 1, pokemon[1])
+game.party.splice(pokemon[starterInd], 1, pokemon[starterInd + 1])
+
+// console.log(game.party);
 
 /*
 Exercise 8
@@ -122,7 +137,6 @@ Solve Exercise 9 here:
 pokemon.forEach((obj) => {
     if (obj.starter === true) {
         console.log(obj);
-        
     }
 })
 
@@ -167,12 +181,12 @@ game.catchPokemon = function (pokemonObj) {
         }
     })
 }
-game.catchPokemon(pokemon[77])
-game.catchPokemon(pokemon[78])
-game.catchPokemon(pokemon[79])
-game.catchPokemon(pokemon[80])
+// game.catchPokemon(pokemon[77])
+// game.catchPokemon(pokemon[78])
+// game.catchPokemon(pokemon[79])
+// game.catchPokemon(pokemon[80])
 
-console.log(game.items)
+// console.log(game.items)
 
 /*
 Exercise 12
@@ -226,7 +240,7 @@ game.gymStatus = function () {
     console.log(gymTally);
     
 }
-game.gymStatus()
+// game.gymStatus()
 
 /*
 Exercise 14
@@ -248,8 +262,9 @@ game.partyCount = function () {
     })
     return countPoksInParty
 }
-console.log(game.partyCount())
 
+// console.log(game.partyCount())
+// console.log(game.party)
 /*
 Exercise 15
 1. Now, complete gyms with a difficulty below 8. Reflect on how this is similar to or different from the previous gym exercises.
@@ -261,9 +276,10 @@ game.gyms.forEach((gym) => {
     if (gym.difficulty < 8) {
         gym.completed = true
     }
-
 })
 
+
+// console.log(game.gyms)
 /*
 Exercise 16
 1. Log the entire `game` object to the console. Take a moment to review the changes you've made throughout the exercises.
@@ -273,13 +289,198 @@ Solve Exercise 16 here:
 */
 
 
-console.log(game)
+// console.log(game)
+
+/*
+Exercise 17
+1. Arrange the Pokémon in `game.party` by their HP. The one with the highest HP should come first.
+2. You'll need to use the `.sort()` method. How does the compare function work in sorting numbers?
+
+
+Solve Exercise 17 here:
+*/
+game.party.sort((a, b) => b.hp - a.hp)
+
+// console.log(game.party);
+
+/*
+Exercise 18
+Add a new property to the `game` object called `collection` and initialize its value to an empty array.
+
+Copy the `catchPokemon` method you wrote in Exercise Twelve and paste it below. Modify it so that:
+  - Ensure that no more than six Pokemon can be in the party at any time. 
+    Excess Pokemon should be placed in the `game.collection` array.
+  - It's up to you how to distribute Pokemon in a situation where more than six 
+    would be placed into the `game.party` array.
+
+Again, for this exercise, it's okay to have a negative number of pokeballs.
+
+After updating the method, 
+use it by calling it and passing in a pokemon object of your choice from the `pokemon` data to catch it.
+
+Also, log the `game.items` array to confirm that the pokeball quantity is being decremented.
+
+Solve Exercise 18 here:
+*/
+
+game.collection = []
+
+game.catchPokemon = function (pokemonObj) {
+    this.party.push(pokemonObj)
+    this.items.forEach((obj) => {
+        if (obj.name === "pokeball") {
+            obj.quantity--
+        }
+    })
+    if (this.party.length > 6) {
+        const extra = this.party.splice(6)
+        game.collection.push(...extra)
+    }
+}
+
+// game.catchPokemon(pokemon[81])
+// // game.catchPokemon(pokemon[82])
+// // game.catchPokemon(pokemon[83])
+// // game.catchPokemon(pokemon[84])
+
+// console.log(game.party)
+// console.log(game.items)
+// console.log(game.collection)
+
+/*
+Exercise 19
+Copy the `catchPokemon` method that you just wrote above, and paste it below. The time has come 
+to make it so that we cannot catch a Pokemon when we do not have any pokeballs to catch it with. 
+
+Modify the method so that if there are no pokeballs a message will be displayed 
+that there are not enough pokeballs to catch the desired Pokemon.
+
+Also, ensure that the Pokemon isn't added to the `game.party` or the `game.collection`.
+
+Solve Exercise 19 here:
+*/
+
+game.catchPokemon = function (pokemonObj) {
+
+    const pokeball = this.items.find(item => item.name === 'pokeball')
+    
+    if (pokeball.quantity <= 0) {
+        console.log('there are not enough pokeballs to catch the desired Pokemon.')
+        return
+    }
+    
+    pokeball.quantity--
+
+    this.party.push(pokemonObj)
+    
+    if (this.party.length > 6) {
+        const extra = this.party.splice(6)
+        game.collection.push(...extra)
+    }
+}
+
+// game.catchPokemon(pokemon[85])
+// game.catchPokemon(pokemon[86])
+// game.catchPokemon(pokemon[87])
+
+// console.log(game.party)
+// console.log(game.collection)
+// console.log(game.items)
+
+/*
+Exercise 20
+Copy the `catchPokemon` method that you just wrote above, and paste it below. 
+Modify is so that you can just pass in the name of a Pokemon instead of an entire object, 
+and the method will look up the Pokemon from the data set for you.
+
+The string passed in should be allowed to be any case (for example, if the string 'PiKacHU' is passed to the function, 
+it should match to 'Pikachu' in the data set). 
+
+If there is not a match, then return a string noting that the selected Pokemon does not exist. 
+Ensure you do not decrement the pokeball count if an invalid Pokemon name is passed in, 
+and also ensure that the Pokemon isn't added to the `game.party` or the `game.collection`.
+
+Solve Exercise 20 here:
+*/
+
+game.catchPokemon = function (pokemonObj) {
+    const caseInsensitive = pokemonObj.toLowerCase()
+
+    const found = pokemon.find(p => p.name.toLowerCase() === caseInsensitive);
+
+    if (!found) {
+        console.log("the selected Pokemon does not exist");
+        return;
+    }
+
+    const pokeball = this.items.find(item => item.name === 'pokeball')
+
+    if (pokeball.quantity <= 0) {
+        console.log('there are not enough pokeballs to catch the desired Pokemon.')
+        return
+    }
+
+    pokeball.quantity--
+
+    this.party.push(found)
+
+    if (this.party.length > 6) {
+        const extra = this.party.splice(6)
+        game.collection.push(...extra)
+    }
+}
 
 
 
+// game.catchPokemon('DiglEtt')
+// game.catchPokemon('Kingler')
+// game.catchPokemon('DiglEtt')
+// game.catchPokemon(pokemon[86])
+// game.catchPokemon(pokemon[87])
 
+// console.log(game.collection)
+// console.log(game.items)
 
+/*
+Exercise 21
+Dynamically construct an object with the existing `pokemon` data sorted by the different pokemon types. 
+The object will have this structure:
 
+{
+  grass: [
+    { number: 1, name: 'Bulbasaur', type: 'grass', hp: 45, starter: true },
+    { number: 2, name: 'Ivysaur', type: 'grass', hp: 60, starter: false },
+    { number: 3, name: 'Venusaur', type: 'grass', hp: 80, starter: false },
+    * more grass type Pokemon objects...
+  ],
+  fire: [
+    { number: 4, name: 'Charmander', type: 'fire', hp: 39, starter: true },
+    * more fire type Pokemon objects...
+  ],
+  water: [
+    * water type Pokemon objects...
+  ],
+  * etc... until there is an array for every Pokemon type!
+}
 
+Log the object when it's constructed.
+
+Solve Exercise 21 here:
+*/
+const sortPokemonByType = {}
+
+pokemon.forEach(obj => {
+    let type = obj.type
+
+    if (!sortPokemonByType[type]) {
+        sortPokemonByType[type] = []
+    } 
+    sortPokemonByType[type].push(obj)
+})
+
+// for some reason consol.dir dosen't print the whole array
+console.dir(sortPokemonByType, { maxArrayLength: null })
+
+// console.log(sortPokemonByType);
 
 
