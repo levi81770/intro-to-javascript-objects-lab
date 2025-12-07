@@ -111,7 +111,9 @@ Solve Exercise 7 here:
 */
 const starterInd = pokemon.indexOf(randomStarter)
 
-game.party.splice(pokemon[starterInd], 1, pokemon[starterInd + 1])
+// game.party.splice(pokemon[starterInd], 1, pokemon[starterInd + 1])
+const starterIdxInParty = game.party.findIndex(p => p.number === randomStarter.number); 
+game.party.splice(starterIdxInParty, 1, pokemon[starterInd + 1]);
 
 // console.log(game.party);
 
@@ -135,9 +137,7 @@ Solve Exercise 9 here:
 */
 
 pokemon.forEach((obj) => {
-    if (obj.starter === true) {
-        console.log(obj);
-    }
+    if (obj.starter) { console.log(obj.name) }
 })
 
 /*
@@ -255,12 +255,12 @@ Solve Exercise 14 here:
 */
 
 game.partyCount = function () {
-    let countPoksInParty = 0
-    this.party.forEach(() => {
-        countPoksInParty++
+    // let countPoksInParty = 0
+    // this.party.forEach(() => {
+    //     countPoksInParty++
         
-    })
-    return countPoksInParty
+    // })
+    return this.party.length
 }
 
 // console.log(game.partyCount())
@@ -479,7 +479,8 @@ pokemon.forEach(obj => {
 })
 
 // for some reason consol.dir dosen't print the whole array
-console.dir(sortPokemonByType, { maxArrayLength: null })
+// even with 'depth: null' it still wouldn't print the whole array
+console.dir(sortPokemonByType, { depth: null })
 
 // console.log(sortPokemonByType);
 
